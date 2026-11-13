@@ -12,7 +12,7 @@
 
 # s-means: Scale- & Distortion-Aware Single/Few-Epoch Clustering
 
-**`s-means`** is a drop-in CPU & GPU clustering library compatible with both **PyTorch** (including custom **fused Triton CUDA kernels**) and **`scikit-learn`** ([**Read the Research Blog**](https://suayptalha.github.io/s-means-blog/)). It achieves **+54% to +55% average Test MSE reduction** over Meta's [`e-means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means) across **NVIDIA T4, L4, and A100 GPUs**—often matching or beating 8-epoch `e-means` quality in **1.0 epoch**—while using **12%–64% less GPU workspace VRAM** and remaining **2.2×–31× faster than `scikit-learn` `MiniBatchKMeans` on CPU**.
+**`s-means`** is a drop-in CPU & GPU clustering library compatible with both **PyTorch** (including custom **fused Triton CUDA kernels**) and **`scikit-learn`** ([**Read the Research Blog**](https://suayptalha.github.io/s-means-blog/)). It achieves **+54% to +55% average Test MSE reduction** over Meta's [`e-means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means) across **NVIDIA T4, L4, and A100 GPUs**—often matching or beating 8-epoch `e-means` quality in **1.0 epoch**—while using **12%–64% less GPU workspace VRAM** and reaching **`2.24×` median CPU speedup over equal-epoch `scikit-learn` `MiniBatchKMeans`** (`0.977×` median time vs `e-means`).
 
 ---
 
@@ -22,7 +22,7 @@
   - **NVIDIA A100 (`SM80`):** **`+55.21%`** mean Test MSE reduction (`+3.14%` to `+77.48%` across 9 benchmarks) with **`0.875×`** median peak workspace VRAM.
   - **NVIDIA L4 (`SM89`):** **`+54.35%`** mean Test MSE reduction (`+2.02%` to `+78.47%`) with **`0.875×`** median peak workspace VRAM.
   - **NVIDIA T4 (`SM75`):** **`+53.81%`–`+54.03%`** mean Test MSE reduction, running cleanly across all 9 workloads (where upstream `e-means` BF16/FP16 Triton kernels fail on SM75), **`0.881×`** faster wall-clock time (`evolved_native`), and **`0.360×`** peak VRAM (`0.222×` on 1M×128D `k=2048`).
-  - **CPU (12 Unseen Datasets × 5 Seeds):** **`+19.67%`** mean Test MSE gain (`+21.30%` Train) at **`1.051×`** `e-means` wall-clock speed (`2.2×–31.0×` faster than `sklearn.cluster.MiniBatchKMeans`) with **`0.0 MB` extra OS RSS memory**.
+  - **CPU (12 Unseen Datasets × 5 Seeds):** **`+19.67%`** mean Test MSE gain (`+21.30%` Train) at **`0.977×`** `e-means` median wall-clock speed (**`2.24×`** median faster than equal-epoch `sklearn.cluster.MiniBatchKMeans`, faster on 8/12 tasks up to `3.71×` while `sklearn` is faster on small/low-d workloads at `0.40×–0.98×`) with **`0.0 MB` extra OS RSS memory**.
 - **1 Epoch Beats 8 Epochs:** On `200k × 128D, k=1024`, `s-means` at **$T = 1.0$ epoch** achieves **`32.2` Test MSE in `33 ms`** on A100—beating `e-means` at **$T = 8.0$ epochs** (`65.7` MSE in `36 ms`) by more than **2× lower quantization error** in less wall-clock time.
 - **Zero-Allocation Custom Triton Kernels:** Fused tiled L2 squared-distance + `argmin` without materializing `[B, K]` distance matrices, online $O(Kd)$ inter-cluster feature variance tracking, fused EMA + SSE-EMA + final-pass updates, Philox-RNG anisotropic splits, and Empirical-Bayes centroid finalization.
 - **Full `scikit-learn` Estimator Compatibility:** Implements `BaseEstimator`, `ClusterMixin`, `TransformerMixin`, `fit`, `predict`, `fit_predict`, `transform`, `score`, `sample_weight`, `Pipeline`, `clone`, and `GridSearchCV`—passing `sklearn.utils.estimator_checks.check_estimator`.
@@ -184,7 +184,7 @@ On `200k × 128D, k=1024`:
   <img src="assets/ablation_unseen.png" alt="Leave-one-out component ablation on 12 unseen CPU datasets" width="76%" />
 </p>
 
-Across 12 strictly unseen CPU datasets (5 seeds each), `s-means` delivers **`+19.67%` mean Test MSE gain** (`+21.30%` Train) over `e-means` at **`1.051×` median CPU wall-clock time** (`2.2×–31.0×` faster than `sklearn.cluster.MiniBatchKMeans`) with zero regression on any dataset (`min = +0.00%`) and `0.0 MB` peak OS RSS overhead (`ru_maxrss`).
+Across 12 strictly unseen CPU datasets (5 seeds each), `s-means` delivers **`+19.67%` mean Test MSE gain** (`+21.30%` Train) over `e-means` at **`0.977×` median CPU wall-clock time** (**`2.24×` median faster than equal-epoch `sklearn.cluster.MiniBatchKMeans`**, faster on 8/12 tasks by `1.43×–3.71×` while `sklearn` is faster on small/low-d workloads `digits` and `uniform_cube_d16` at `0.40×–0.98×`) with zero regression on any dataset (`min = +0.00%`) and `0.0 MB` peak OS RSS overhead (`ru_maxrss`).
 
 ### Architectural & Engineering Notes
 

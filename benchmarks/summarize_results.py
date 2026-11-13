@@ -41,9 +41,10 @@ def print_cpu_summary() -> None:
     data = json.loads((RESULTS_DIR / "cpu_unseen_results.json").read_text())
     print("\n=== CPU 12 Unseen Datasets (5-Seed Mean) ===")
     for row in data["datasets"]:
+        sk_ev = row.get("sk_vs_ev_t_rat", row["sk_t_rat"] / row["t_rat"])
         print(
             f"  {row['name']:22s} | Test {row['d_te_pct']:+6.2f}% | Train {row['d_tr_pct']:+6.2f}% | "
-            f"Time {row['t_rat']:.3f}x e-means ({row['sk_t_rat']:.1f}x faster sklearn) | Mem {row['m_rat']:.3f}x"
+            f"Time {row['t_rat']:.3f}x e-means ({sk_ev:.2f}x vs sklearn) | Mem {row['m_rat']:.3f}x"
         )
 
 
