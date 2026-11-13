@@ -1,0 +1,1183 @@
+{
+  "system": {
+    "gpu_name": "Tesla T4",
+    "capability": "SM75",
+    "vram_gb": 14.56,
+    "sm_count": 40,
+    "torch_version": "2.14.1+cu130",
+    "cuda_version": "13.0",
+    "triton_version": "3.8.0",
+    "has_cute": false
+  },
+  "datasets": [
+    {
+      "name": "gmm_100k_d128_k512",
+      "n": 100000,
+      "d": 128,
+      "k": 512,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 69.12891145833333,
+          "te_std": 5.672955214745055,
+          "tr_mse": 67.75678903645833,
+          "time_ms": 76.97853399999606,
+          "time_std_ms": 9.53392575901908,
+          "peak_delta_mb": 21.7626953125,
+          "dead": 0.0,
+          "splits": 267.3333333333333,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "error": "OutOfResources: out of resource: shared memory, Required: 98304, Hardware limit: 65536. Reducing block sizes or `num_stages` may help."
+        },
+        "evolved_native": {
+          "te_mse": 14.940537304687501,
+          "te_std": 1.1759128331607727,
+          "tr_mse": 14.758711562499998,
+          "time_ms": 82.54245500000934,
+          "time_std_ms": 4.044703762815656,
+          "peak_delta_mb": 14.30908203125,
+          "dead": 0.0,
+          "splits": 129.66666666666666,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 78.38742576802653,
+          "time_ratio_vs_ref": 1.072278864131312,
+          "vram_ratio_vs_ref": 0.6575050482387256
+        },
+        "evolved_triton": {
+          "te_mse": 14.7191134765625,
+          "te_std": 0.46498346266325247,
+          "tr_mse": 14.544612682291666,
+          "time_ms": 1311.956109666653,
+          "time_std_ms": 1369.8445606142777,
+          "peak_delta_mb": 7.48095703125,
+          "dead": 0.0,
+          "splits": 132.33333333333334,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 78.70773144542528,
+          "time_ratio_vs_ref": 17.04314230856514,
+          "vram_ratio_vs_ref": 0.3437514022885349
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 14.71911484375,
+          "te_std": 0.46498321133315756,
+          "tr_mse": 14.544613958333334,
+          "time_ms": 47.96506666665815,
+          "time_std_ms": 2.3493758691277407,
+          "peak_delta_mb": 7.7509765625,
+          "dead": 0.0,
+          "splits": 132.33333333333334,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 78.7077294676891,
+          "time_ratio_vs_ref": 0.623096650121456,
+          "vram_ratio_vs_ref": 0.3561588512452322
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 13.949012109375,
+          "te_std": 1.1832349202330208,
+          "tr_mse": 13.8210887890625,
+          "time_ms": 1381.47345500001,
+          "time_std_ms": 1654.955856961938,
+          "peak_delta_mb": 8.02001953125,
+          "dead": 0.0,
+          "splits": 134.66666666666666,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 79.82173910291846,
+          "time_ratio_vs_ref": 17.946216733616684,
+          "vram_ratio_vs_ref": 0.3685214269688131
+        }
+      }
+    },
+    {
+      "name": "zipf_200k_d128_k1024",
+      "n": 200000,
+      "d": 128,
+      "k": 1024,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 60.052599479166666,
+          "te_std": 1.8568771202972356,
+          "tr_mse": 60.52557075520833,
+          "time_ms": 123.50080099999634,
+          "time_std_ms": 0.9360972112630483,
+          "peak_delta_mb": 51.86962890625,
+          "dead": 0.0,
+          "splits": 955.0,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "error": "OutOfResources: out of resource: shared memory, Required: 98304, Hardware limit: 65536. Reducing block sizes or `num_stages` may help."
+        },
+        "evolved_native": {
+          "te_mse": 32.444493619791665,
+          "te_std": 0.8872320981199222,
+          "tr_mse": 31.79736796875,
+          "time_ms": 99.40175766666925,
+          "time_std_ms": 2.261321267486219,
+          "peak_delta_mb": 45.275390625,
+          "dead": 10.333333333333334,
+          "splits": 1240.0,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 45.97320698657309,
+          "time_ratio_vs_ref": 0.8048673114814227,
+          "vram_ratio_vs_ref": 0.8728689905769611
+        },
+        "evolved_triton": {
+          "te_mse": 32.825555989583336,
+          "te_std": 1.3945729425142062,
+          "tr_mse": 31.614933411458335,
+          "time_ms": 553.0159313333343,
+          "time_std_ms": 1.1910366886371435,
+          "peak_delta_mb": 18.67919921875,
+          "dead": 11.666666666666666,
+          "splits": 1219.6666666666667,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 45.338659318201344,
+          "time_ratio_vs_ref": 4.4778327497110775,
+          "vram_ratio_vs_ref": 0.36011823513353225
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 32.31868684895833,
+          "te_std": 1.207072076679933,
+          "tr_mse": 30.921996145833333,
+          "time_ms": 152.03977699998936,
+          "time_std_ms": 0.4321868165397895,
+          "peak_delta_mb": 18.67919921875,
+          "dead": 8.0,
+          "splits": 1204.0,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 46.18270128311387,
+          "time_ratio_vs_ref": 1.2310833271437152,
+          "vram_ratio_vs_ref": 0.36011823513353225
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 33.07843502604167,
+          "te_std": 0.6104058155568006,
+          "tr_mse": 32.000142421875,
+          "time_ms": 822.7744659999985,
+          "time_std_ms": 2.31722845986691,
+          "peak_delta_mb": 18.67919921875,
+          "dead": 12.0,
+          "splits": 1221.6666666666667,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 44.917563414524345,
+          "time_ratio_vs_ref": 6.662098215865198,
+          "vram_ratio_vs_ref": 0.36011823513353225
+        }
+      }
+    },
+    {
+      "name": "large_500k_d128_k1024",
+      "n": 500000,
+      "d": 128,
+      "k": 1024,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 68.32350333333333,
+          "te_std": 4.101238362645959,
+          "tr_mse": 68.51352354166667,
+          "time_ms": 292.46767799997997,
+          "time_std_ms": 1.942586946130017,
+          "peak_delta_mb": 94.4189453125,
+          "dead": 0.0,
+          "splits": 505.6666666666667,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "error": "OutOfResources: out of resource: shared memory, Required: 98304, Hardware limit: 65536. Reducing block sizes or `num_stages` may help."
+        },
+        "evolved_native": {
+          "te_mse": 17.51517479166667,
+          "te_std": 1.2474864206613487,
+          "tr_mse": 17.644114177083335,
+          "time_ms": 237.3552503333561,
+          "time_std_ms": 0.6569004078719094,
+          "peak_delta_mb": 46.89892578125,
+          "dead": 0.0,
+          "splits": 266.0,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 74.36434910807412,
+          "time_ratio_vs_ref": 0.8115606208402023,
+          "vram_ratio_vs_ref": 0.49671096860940167
+        },
+        "evolved_triton": {
+          "te_mse": 17.069718541666667,
+          "te_std": 1.279870772870653,
+          "tr_mse": 17.147972411458333,
+          "time_ms": 1341.3909416666645,
+          "time_std_ms": 3.0206810890632454,
+          "peak_delta_mb": 32.82763671875,
+          "dead": 0.0,
+          "splits": 263.3333333333333,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 75.01633009304607,
+          "time_ratio_vs_ref": 4.586458752774576,
+          "vram_ratio_vs_ref": 0.34768061229766767
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 17.11363,
+          "te_std": 1.2908791958051309,
+          "tr_mse": 17.11885422916667,
+          "time_ms": 348.71148799997326,
+          "time_std_ms": 0.9360150009215094,
+          "peak_delta_mb": 33.42529296875,
+          "dead": 0.0,
+          "splits": 263.0,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 74.95206017685179,
+          "time_ratio_vs_ref": 1.1923077804173532,
+          "vram_ratio_vs_ref": 0.35401044629466827
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 17.079127083333333,
+          "te_std": 1.3219739639528068,
+          "tr_mse": 17.007237973958336,
+          "time_ms": 1992.671959666647,
+          "time_std_ms": 3.2328817882009186,
+          "peak_delta_mb": 35.14794921875,
+          "dead": 0.0,
+          "splits": 262.6666666666667,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 75.002559514537,
+          "time_ratio_vs_ref": 6.813306596111395,
+          "vram_ratio_vs_ref": 0.37225526193308167
+        }
+      }
+    },
+    {
+      "name": "highdim_250k_d256_k512",
+      "n": 250000,
+      "d": 256,
+      "k": 512,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 136.7488734375,
+          "te_std": 6.556305725536604,
+          "tr_mse": 134.03235091666667,
+          "time_ms": 156.8713433333452,
+          "time_std_ms": 2.5504726861840563,
+          "peak_delta_mb": 42.24169921875,
+          "dead": 0.0,
+          "splits": 435.0,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "te_mse": 141.20080416666667,
+          "te_std": 5.729121331486535,
+          "tr_mse": 139.28238183333335,
+          "time_ms": 3424.7544959999914,
+          "time_std_ms": 0.8241092559380065,
+          "peak_delta_mb": 139.67919921875,
+          "dead": 0.0,
+          "splits": 433.0,
+          "resolved": "triton:float16",
+          "te_gain_vs_ref_pct": -3.2555520329031307,
+          "time_ratio_vs_ref": 21.831613239408092,
+          "vram_ratio_vs_ref": 3.3066662042977195
+        },
+        "evolved_native": {
+          "te_mse": 36.024867968749994,
+          "te_std": 1.0876133770350924,
+          "tr_mse": 35.32619029166667,
+          "time_ms": 119.98272833329793,
+          "time_std_ms": 0.653200385947212,
+          "peak_delta_mb": 37.1103515625,
+          "dead": 1.0,
+          "splits": 217.33333333333334,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 73.65618665574245,
+          "time_ratio_vs_ref": 0.7648479689393589,
+          "vram_ratio_vs_ref": 0.8785241183202136
+        },
+        "evolved_triton": {
+          "te_mse": 35.505832552083334,
+          "te_std": 1.0044358349718265,
+          "tr_mse": 34.75321916666667,
+          "time_ms": 269.7757426666764,
+          "time_std_ms": 102.41839006499198,
+          "peak_delta_mb": 19.65087890625,
+          "dead": 0.6666666666666666,
+          "splits": 217.33333333333334,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 74.03574036146559,
+          "time_ratio_vs_ref": 1.7197260948636997,
+          "vram_ratio_vs_ref": 0.4652009571037209
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 36.817695442708334,
+          "te_std": 1.1304626479406157,
+          "tr_mse": 36.1164450625,
+          "time_ms": 187.34153666662223,
+          "time_std_ms": 1.5718238670614244,
+          "peak_delta_mb": 20.33837890625,
+          "dead": 0.6666666666666666,
+          "splits": 215.33333333333334,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 73.07641773039134,
+          "time_ratio_vs_ref": 1.1942368356502762,
+          "vram_ratio_vs_ref": 0.4814763440487337
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 36.643871223958335,
+          "te_std": 2.31812701816541,
+          "tr_mse": 35.41636275,
+          "time_ms": 1598.5281686666895,
+          "time_std_ms": 1.427501206467186,
+          "peak_delta_mb": 27.94873046875,
+          "dead": 2.3333333333333335,
+          "splits": 231.0,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 73.20352972362429,
+          "time_ratio_vs_ref": 10.190058519929178,
+          "vram_ratio_vs_ref": 0.6616384043647628
+        }
+      }
+    },
+    {
+      "name": "aniso_200k_d64_k512",
+      "n": 200000,
+      "d": 64,
+      "k": 512,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 139.023425,
+          "te_std": 8.85849403245571,
+          "tr_mse": 139.43427583333334,
+          "time_ms": 56.818334666672854,
+          "time_std_ms": 0.7762279738164125,
+          "peak_delta_mb": 31.54736328125,
+          "dead": 0.0,
+          "splits": 46.333333333333336,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "te_mse": 139.28100416666666,
+          "te_std": 7.208484230801472,
+          "tr_mse": 139.930546875,
+          "time_ms": 484.14601333331575,
+          "time_std_ms": 1.795911741142966,
+          "peak_delta_mb": 38.28662109375,
+          "dead": 0.0,
+          "splits": 43.666666666666664,
+          "resolved": "triton:float16",
+          "te_gain_vs_ref_pct": -0.18527752906869477,
+          "time_ratio_vs_ref": 8.52094691218211,
+          "vram_ratio_vs_ref": 1.2136234889876023
+        },
+        "evolved_native": {
+          "te_mse": 70.30699947916666,
+          "te_std": 3.9316508431178967,
+          "tr_mse": 70.41821645833333,
+          "time_ms": 89.55319633328902,
+          "time_std_ms": 8.318200874120192,
+          "peak_delta_mb": 23.9951171875,
+          "dead": 0.0,
+          "splits": 33.333333333333336,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 49.42794749937526,
+          "time_ratio_vs_ref": 1.5761320154604426,
+          "vram_ratio_vs_ref": 0.7606061075082419
+        },
+        "evolved_triton": {
+          "te_mse": 70.88176770833333,
+          "te_std": 4.220124300198194,
+          "tr_mse": 70.95193888020833,
+          "time_ms": 370.510746666658,
+          "time_std_ms": 83.16971077174371,
+          "peak_delta_mb": 13.0029296875,
+          "dead": 0.0,
+          "splits": 35.333333333333336,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 49.014514850045366,
+          "time_ratio_vs_ref": 6.520971599049407,
+          "vram_ratio_vs_ref": 0.4121716788682691
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 70.88256848958333,
+          "te_std": 4.219137288522908,
+          "tr_mse": 70.95224546875,
+          "time_ms": 50.330908000015974,
+          "time_std_ms": 0.29579513610938196,
+          "peak_delta_mb": 13.1669921875,
+          "dead": 0.0,
+          "splits": 35.333333333333336,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 49.01393884549792,
+          "time_ratio_vs_ref": 0.885821597821977,
+          "vram_ratio_vs_ref": 0.41737219272856724
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 71.01500234375,
+          "te_std": 5.680082172077113,
+          "tr_mse": 70.70440283854167,
+          "time_ms": 268.73873533331033,
+          "time_std_ms": 0.42107888195032595,
+          "peak_delta_mb": 13.4794921875,
+          "dead": 0.0,
+          "splits": 35.333333333333336,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 48.91867874514673,
+          "time_ratio_vs_ref": 4.729789018102649,
+          "vram_ratio_vs_ref": 0.4272779334148493
+        }
+      }
+    },
+    {
+      "name": "covtype_real_581k",
+      "n": 465000,
+      "d": 54,
+      "k": 512,
+      "nepochs": 4.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 59297.75666885035,
+          "te_std": 524.7991162313836,
+          "tr_mse": 58809.58460788531,
+          "time_ms": 128.2391690000395,
+          "time_std_ms": 0.7815148773300541,
+          "peak_delta_mb": 91.50927734375,
+          "dead": 0.0,
+          "splits": 0.0,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "te_mse": 59355.48219149743,
+          "te_std": 615.6012824221938,
+          "tr_mse": 58846.28363010753,
+          "time_ms": 1526.4186386666552,
+          "time_std_ms": 2.15475801000787,
+          "peak_delta_mb": 77.48779296875,
+          "dead": 0.0,
+          "splits": 0.0,
+          "resolved": "triton:float16",
+          "te_gain_vs_ref_pct": -0.09734857756837911,
+          "time_ratio_vs_ref": 11.90290494370082,
+          "vram_ratio_vs_ref": 0.846775269327841
+        },
+        "evolved_native": {
+          "te_mse": 58169.74480800837,
+          "te_std": 231.51945457315708,
+          "tr_mse": 57804.59545232975,
+          "time_ms": 159.67877866664062,
+          "time_std_ms": 14.274106261781561,
+          "peak_delta_mb": 27.48974609375,
+          "dead": 0.0,
+          "splits": 2.3333333333333335,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 1.9022842080542612,
+          "time_ratio_vs_ref": 1.2451638599326187,
+          "vram_ratio_vs_ref": 0.3004039250630966
+        },
+        "evolved_triton": {
+          "te_mse": 58182.68540036088,
+          "te_std": 250.1545771031321,
+          "tr_mse": 57818.66249175628,
+          "time_ms": 2634.602041999983,
+          "time_std_ms": 2547.602413138782,
+          "peak_delta_mb": 27.34033203125,
+          "dead": 0.0,
+          "splits": 2.3333333333333335,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 1.880461135682765,
+          "time_ratio_vs_ref": 20.54444100459799,
+          "vram_ratio_vs_ref": 0.2987711500392186
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 58182.68540036088,
+          "te_std": 250.1545771031321,
+          "tr_mse": 57818.66249175628,
+          "time_ms": 423.5429103333293,
+          "time_std_ms": 410.47216808463276,
+          "peak_delta_mb": 27.517578125,
+          "dead": 0.0,
+          "splits": 2.3333333333333335,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 1.880461135682765,
+          "time_ratio_vs_ref": 3.30275775830393,
+          "vram_ratio_vs_ref": 0.3007080694302896
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 58217.50740727971,
+          "te_std": 248.25866355917998,
+          "tr_mse": 57843.75822222222,
+          "time_ms": 1632.2738929999712,
+          "time_std_ms": 1133.376339295876,
+          "peak_delta_mb": 27.84130859375,
+          "dead": 0.0,
+          "splits": 1.6666666666666667,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 1.8217371486805467,
+          "time_ratio_vs_ref": 12.728356755021302,
+          "vram_ratio_vs_ref": 0.3042457486486919
+        }
+      }
+    },
+    {
+      "name": "lowd_200k_d8_k512",
+      "n": 200000,
+      "d": 8,
+      "k": 512,
+      "nepochs": 4.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 0.2842996724446614,
+          "te_std": 0.0016134919359378883,
+          "tr_mse": 0.2841613569132487,
+          "time_ms": 140.1293156666649,
+          "time_std_ms": 4.618502367236861,
+          "peak_delta_mb": 21.73779296875,
+          "dead": 0.0,
+          "splits": 61.666666666666664,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "te_mse": 0.28240948282877604,
+          "te_std": 0.0014751643789719271,
+          "tr_mse": 0.28290246897379556,
+          "time_ms": 576.0561496666696,
+          "time_std_ms": 1.2917982142908644,
+          "peak_delta_mb": 16.62939453125,
+          "dead": 0.0,
+          "splits": 59.0,
+          "resolved": "triton:float16",
+          "te_gain_vs_ref_pct": 0.6648581757523142,
+          "time_ratio_vs_ref": 4.110889623103373,
+          "vram_ratio_vs_ref": 0.764999213818819
+        },
+        "evolved_native": {
+          "te_mse": 0.22661202596028648,
+          "te_std": 0.019140008123841368,
+          "tr_mse": 0.22655203002929689,
+          "time_ms": 718.8724409999926,
+          "time_std_ms": 7.561253615518882,
+          "peak_delta_mb": 12.11181640625,
+          "dead": 0.0,
+          "splits": 75.33333333333333,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 20.2911406785401,
+          "time_ratio_vs_ref": 5.13006459483484,
+          "vram_ratio_vs_ref": 0.5571778341831578
+        },
+        "evolved_triton": {
+          "te_mse": 0.2255151387532552,
+          "te_std": 0.0178831428782266,
+          "tr_mse": 0.2255011193847656,
+          "time_ms": 475.5327100000007,
+          "time_std_ms": 33.51548048054584,
+          "peak_delta_mb": 12.05224609375,
+          "dead": 0.0,
+          "splits": 71.33333333333333,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 20.676961456172116,
+          "time_ratio_vs_ref": 3.3935276693363905,
+          "vram_ratio_vs_ref": 0.5544374312091467
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 0.22549403584798178,
+          "te_std": 0.01786091742718459,
+          "tr_mse": 0.22549931050618488,
+          "time_ms": 498.01904466661045,
+          "time_std_ms": 10.067227974634198,
+          "peak_delta_mb": 12.07177734375,
+          "dead": 0.0,
+          "splits": 71.33333333333333,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 20.68438422422948,
+          "time_ratio_vs_ref": 3.553996123489835,
+          "vram_ratio_vs_ref": 0.555335923987511
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 0.22688534444173178,
+          "te_std": 0.017669707478516785,
+          "tr_mse": 0.22672033854166665,
+          "time_ms": 570.4438569999866,
+          "time_std_ms": 61.67641936399453,
+          "peak_delta_mb": 12.06494140625,
+          "dead": 0.0,
+          "splits": 71.0,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 20.19500321939529,
+          "time_ratio_vs_ref": 4.070838812607493,
+          "vram_ratio_vs_ref": 0.5550214515150834
+        }
+      }
+    },
+    {
+      "name": "frac_T1p5_300k_d64_k512",
+      "n": 300000,
+      "d": 64,
+      "k": 512,
+      "nepochs": 1.5,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 38.88624739583333,
+          "te_std": 0.6262371689124077,
+          "tr_mse": 38.68764166666667,
+          "time_ms": 69.6747529999963,
+          "time_std_ms": 1.4523365936713248,
+          "peak_delta_mb": 33.01318359375,
+          "dead": 0.0,
+          "splits": 124.33333333333333,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "te_mse": 38.337211718750005,
+          "te_std": 0.6230164768488972,
+          "tr_mse": 38.134586579861114,
+          "time_ms": 367.1046896666515,
+          "time_std_ms": 3.372477453879369,
+          "peak_delta_mb": 56.09765625,
+          "dead": 0.0,
+          "splits": 129.33333333333334,
+          "resolved": "triton:float16",
+          "te_gain_vs_ref_pct": 1.4119019289635881,
+          "time_ratio_vs_ref": 5.2688337433599655,
+          "vram_ratio_vs_ref": 1.6992501220215646
+        },
+        "evolved_native": {
+          "te_mse": 13.322710611979167,
+          "te_std": 0.5648053453164649,
+          "tr_mse": 13.135099622395833,
+          "time_ms": 61.38509400000203,
+          "time_std_ms": 1.773454958267284,
+          "peak_delta_mb": 24.263671875,
+          "dead": 0.0,
+          "splits": 82.0,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 65.739274154269,
+          "time_ratio_vs_ref": 0.8810234892401454,
+          "vram_ratio_vs_ref": 0.7349691618227803
+        },
+        "evolved_triton": {
+          "te_mse": 12.807705859375,
+          "te_std": 0.6955485336191362,
+          "tr_mse": 12.563949622395834,
+          "time_ms": 206.17232099997787,
+          "time_std_ms": 0.23406160168972123,
+          "peak_delta_mb": 17.904296875,
+          "dead": 0.0,
+          "splits": 83.33333333333333,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 67.06366204740202,
+          "time_ratio_vs_ref": 2.959067841976976,
+          "vram_ratio_vs_ref": 0.5423377852716273
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 12.807711848958334,
+          "te_std": 0.6955483497032652,
+          "tr_mse": 12.563939552951389,
+          "time_ms": 39.67119666663166,
+          "time_std_ms": 0.16818539591083417,
+          "peak_delta_mb": 18.087890625,
+          "dead": 0.0,
+          "splits": 83.33333333333333,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 67.06364664457007,
+          "time_ratio_vs_ref": 0.5693769257658332,
+          "vram_ratio_vs_ref": 0.5478990105160403
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 12.929633138020833,
+          "te_std": 0.6421388086993859,
+          "tr_mse": 12.69934609809028,
+          "time_ms": 204.18549533333893,
+          "time_std_ms": 0.37427721005755904,
+          "peak_delta_mb": 18.587890625,
+          "dead": 0.0,
+          "splits": 84.0,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 66.75011346194786,
+          "time_ratio_vs_ref": 2.930552123139206,
+          "vram_ratio_vs_ref": 0.5630444750114626
+        }
+      }
+    },
+    {
+      "name": "mega_1m_d128_k2048",
+      "n": 1000000,
+      "d": 128,
+      "k": 2048,
+      "nepochs": 3.0,
+      "ref_method": "emeans_native",
+      "methods": {
+        "emeans_native": {
+          "te_mse": 69.59081166666668,
+          "te_std": 0.16219138023404092,
+          "tr_mse": 69.31288706770833,
+          "time_ms": 1109.3554829999448,
+          "time_std_ms": 31.181915528062856,
+          "peak_delta_mb": 310.16015625,
+          "dead": 0.0,
+          "splits": 1020.3333333333334,
+          "resolved": "native:bfloat16"
+        },
+        "emeans_triton_fp16": {
+          "error": "OutOfResources: out of resource: shared memory, Required: 98304, Hardware limit: 65536. Reducing block sizes or `num_stages` may help."
+        },
+        "evolved_native": {
+          "te_mse": 17.688632291666664,
+          "te_std": 0.765734432408265,
+          "tr_mse": 18.049695269531252,
+          "time_ms": 845.610198666653,
+          "time_std_ms": 5.80301934791142,
+          "peak_delta_mb": 85.8779296875,
+          "dead": 0.0,
+          "splits": 529.0,
+          "resolved": "native:float32",
+          "te_gain_vs_ref_pct": 74.58194283407195,
+          "time_ratio_vs_ref": 0.7622535892461939,
+          "vram_ratio_vs_ref": 0.2768825329655798
+        },
+        "evolved_triton": {
+          "te_mse": 17.72691,
+          "te_std": 1.1097699925323539,
+          "tr_mse": 17.862979678385415,
+          "time_ms": 5317.742809999989,
+          "time_std_ms": 16.66460561647872,
+          "peak_delta_mb": 68.92529296875,
+          "dead": 0.0,
+          "splits": 513.6666666666666,
+          "resolved": "triton_custom:float32",
+          "te_gain_vs_ref_pct": 74.52693886527693,
+          "time_ratio_vs_ref": 4.7935426393887965,
+          "vram_ratio_vs_ref": 0.2222248460346847
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 17.63904270833333,
+          "te_std": 1.2334108487491366,
+          "tr_mse": 17.770683928710937,
+          "time_ms": 1474.9525536666777,
+          "time_std_ms": 17.182999313989644,
+          "peak_delta_mb": 68.92529296875,
+          "dead": 0.0,
+          "splits": 514.0,
+          "resolved": "emeans_triton:float32",
+          "te_gain_vs_ref_pct": 74.65320164273604,
+          "time_ratio_vs_ref": 1.3295580868975172,
+          "vram_ratio_vs_ref": 0.2222248460346847
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 18.446296458333332,
+          "te_std": 0.7352342035465098,
+          "tr_mse": 18.559602640299477,
+          "time_ms": 7745.2953200000065,
+          "time_std_ms": 8.692803548531824,
+          "peak_delta_mb": 71.39111328125,
+          "dead": 0.0,
+          "splits": 519.0,
+          "resolved": "triton_custom:float16",
+          "te_gain_vs_ref_pct": 73.49320116182963,
+          "time_ratio_vs_ref": 6.981797483936348,
+          "vram_ratio_vs_ref": 0.23017499779599754
+        }
+      }
+    }
+  ],
+  "epoch_curve": [
+    {
+      "nepochs": 1.0,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 90.19803359375001,
+          "tr_mse": 89.520763828125,
+          "time_ms": 47.497379999981604,
+          "peak_delta_mb": 33.146484375
+        },
+        "evolved_triton": {
+          "te_mse": 30.948343359375,
+          "tr_mse": 29.334390156250002,
+          "time_ms": 202.0484505000013,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 30.342233203124998,
+          "tr_mse": 28.41115884765625,
+          "time_ms": 268.90282050004544,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 30.9207634765625,
+          "tr_mse": 29.38407423828125,
+          "time_ms": 52.37486950005632,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_native": {
+          "te_mse": 29.4956396484375,
+          "tr_mse": 28.242630019531248,
+          "time_ms": 58.55747999999039,
+          "peak_delta_mb": 24.98095703125
+        },
+        "lloyd_gpu": {
+          "te_mse": 144.76166406250002,
+          "tr_mse": 144.76114007812498,
+          "time_ms": 17.321602500032895,
+          "peak_delta_mb": 130.72412109375
+        }
+      }
+    },
+    {
+      "nepochs": 1.5,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 83.59296015625,
+          "tr_mse": 82.72633218749999,
+          "time_ms": 72.88874600004647,
+          "peak_delta_mb": 32.64697265625
+        },
+        "evolved_triton": {
+          "te_mse": 21.873734179687503,
+          "tr_mse": 20.753607568359378,
+          "time_ms": 302.60351899994475,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 21.948800585937498,
+          "tr_mse": 20.766162988281252,
+          "time_ms": 401.43544650004515,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 21.873675390625003,
+          "tr_mse": 20.75355720703125,
+          "time_ms": 77.48701850005091,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_native": {
+          "te_mse": 22.08806796875,
+          "tr_mse": 21.04128638671875,
+          "time_ms": 83.0327384999805,
+          "peak_delta_mb": 24.9794921875
+        }
+      }
+    },
+    {
+      "nepochs": 2.0,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 83.1250828125,
+          "tr_mse": 82.656815859375,
+          "time_ms": 81.18270099993197,
+          "peak_delta_mb": 51.869140625
+        },
+        "evolved_triton": {
+          "te_mse": 22.4935548828125,
+          "tr_mse": 21.40569197265625,
+          "time_ms": 368.2240344999741,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 22.641834375,
+          "tr_mse": 21.44107291015625,
+          "time_ms": 547.7058615000487,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 22.493562890625,
+          "tr_mse": 21.405619277343753,
+          "time_ms": 104.23237499998095,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_native": {
+          "te_mse": 23.031808398437498,
+          "tr_mse": 21.65354171875,
+          "time_ms": 77.90486799996188,
+          "peak_delta_mb": 45.125
+        },
+        "lloyd_gpu": {
+          "te_mse": 122.50088203125,
+          "tr_mse": 122.339525078125,
+          "time_ms": 35.64747099994747,
+          "peak_delta_mb": 130.72509765625
+        }
+      }
+    },
+    {
+      "nepochs": 3.0,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 76.57101875000001,
+          "tr_mse": 75.6260433984375,
+          "time_ms": 124.31457400003865,
+          "peak_delta_mb": 51.86962890625
+        },
+        "evolved_triton": {
+          "te_mse": 18.9320791015625,
+          "tr_mse": 18.299158193359375,
+          "time_ms": 550.1898305000168,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 20.2858443359375,
+          "tr_mse": 19.181599082031248,
+          "time_ms": 815.8417069999473,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 19.266923828125,
+          "tr_mse": 18.499473740234375,
+          "time_ms": 148.81362900001704,
+          "peak_delta_mb": 18.67919921875
+        },
+        "evolved_native": {
+          "te_mse": 20.540291015625,
+          "tr_mse": 19.446805126953123,
+          "time_ms": 97.54628699994328,
+          "peak_delta_mb": 45.1220703125
+        },
+        "lloyd_gpu": {
+          "te_mse": 121.10736328125,
+          "tr_mse": 120.961672734375,
+          "time_ms": 59.999188000062986,
+          "peak_delta_mb": 130.72509765625
+        }
+      }
+    },
+    {
+      "nepochs": 5.0,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 70.562421484375,
+          "tr_mse": 69.32908953124999,
+          "time_ms": 189.70055099998717,
+          "peak_delta_mb": 90.31494140625
+        },
+        "evolved_triton": {
+          "te_mse": 18.677586914062502,
+          "tr_mse": 17.574110078125,
+          "time_ms": 886.7580310000562,
+          "peak_delta_mb": 20.140625
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 18.671734765625,
+          "tr_mse": 17.608608291015628,
+          "time_ms": 1319.064922500047,
+          "peak_delta_mb": 28.52099609375
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 18.6474443359375,
+          "tr_mse": 17.51558197265625,
+          "time_ms": 229.0170075000333,
+          "peak_delta_mb": 21.015625
+        },
+        "evolved_native": {
+          "te_mse": 19.006595703125,
+          "tr_mse": 18.079742333984377,
+          "time_ms": 157.99931449998894,
+          "peak_delta_mb": 45.130859375
+        },
+        "lloyd_gpu": {
+          "te_mse": 120.60081015624999,
+          "tr_mse": 120.43329859375,
+          "time_ms": 117.88432000003013,
+          "peak_delta_mb": 130.72509765625
+        }
+      }
+    },
+    {
+      "nepochs": 8.0,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 64.654942578125,
+          "tr_mse": 63.7362284375,
+          "time_ms": 307.47750199998336,
+          "peak_delta_mb": 90.31494140625
+        },
+        "evolved_triton": {
+          "te_mse": 16.503725292968753,
+          "tr_mse": 15.682822685546874,
+          "time_ms": 1418.8613155000098,
+          "peak_delta_mb": 20.140625
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 16.0366470703125,
+          "tr_mse": 15.142606240234375,
+          "time_ms": 2109.6599039999546,
+          "peak_delta_mb": 28.52099609375
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 16.53225537109375,
+          "tr_mse": 15.735318505859375,
+          "time_ms": 360.9365684999375,
+          "peak_delta_mb": 21.015625
+        },
+        "evolved_native": {
+          "te_mse": 16.93930390625,
+          "tr_mse": 16.066164931640625,
+          "time_ms": 256.03593300002103,
+          "peak_delta_mb": 45.130859375
+        },
+        "lloyd_gpu": {
+          "te_mse": 120.550584375,
+          "tr_mse": 120.3801653125,
+          "time_ms": 191.29703499999096,
+          "peak_delta_mb": 130.72509765625
+        }
+      }
+    }
+  ],
+  "k_scaling": [
+    {
+      "k": 128,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 75.46931666666666,
+          "time_ms": 67.23488599999428,
+          "peak_delta_mb": 28.65234375
+        },
+        "evolved_native": {
+          "te_mse": 22.9446,
+          "time_ms": 92.52030750002405,
+          "peak_delta_mb": 16.63232421875
+        },
+        "evolved_triton": {
+          "te_mse": 22.824053125,
+          "time_ms": 106.84584050005697,
+          "peak_delta_mb": 16.4365234375
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 25.339615625,
+          "time_ms": 146.83822950001968,
+          "peak_delta_mb": 18.56005859375
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 22.823615625000002,
+          "time_ms": 47.01371100003371,
+          "peak_delta_mb": 16.54833984375
+        }
+      }
+    },
+    {
+      "k": 256,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 78.9856375,
+          "time_ms": 69.84801999993806,
+          "peak_delta_mb": 28.904296875
+        },
+        "evolved_native": {
+          "te_mse": 18.94969375,
+          "time_ms": 106.89822750003941,
+          "peak_delta_mb": 18.96923828125
+        },
+        "evolved_triton": {
+          "te_mse": 19.69043125,
+          "time_ms": 191.3300234999724,
+          "peak_delta_mb": 16.62939453125
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 19.96199166666667,
+          "time_ms": 272.90934050000715,
+          "peak_delta_mb": 18.7841796875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 19.690403125,
+          "time_ms": 60.323836500003836,
+          "peak_delta_mb": 16.8037109375
+        }
+      }
+    },
+    {
+      "k": 512,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 73.2828125,
+          "time_ms": 101.52052499995534,
+          "peak_delta_mb": 35.388671875
+        },
+        "evolved_native": {
+          "te_mse": 16.889485416666666,
+          "time_ms": 104.8678479999694,
+          "peak_delta_mb": 27.63720703125
+        },
+        "evolved_triton": {
+          "te_mse": 17.116451041666668,
+          "time_ms": 360.40486000007377,
+          "peak_delta_mb": 17.01513671875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 16.714517708333332,
+          "time_ms": 524.1998344999388,
+          "peak_delta_mb": 19.232421875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 16.267286979166666,
+          "time_ms": 102.67322499998954,
+          "peak_delta_mb": 17.314453125
+        }
+      }
+    },
+    {
+      "k": 1024,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 72.31282708333333,
+          "time_ms": 144.96304599998666,
+          "peak_delta_mb": 90.71826171875
+        },
+        "evolved_native": {
+          "te_mse": 19.7584125,
+          "time_ms": 125.54063649997715,
+          "peak_delta_mb": 45.04150390625
+        },
+        "evolved_triton": {
+          "te_mse": 19.579160416666667,
+          "time_ms": 674.189110000043,
+          "peak_delta_mb": 19.796875
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 19.849632291666666,
+          "time_ms": 994.5950105000065,
+          "peak_delta_mb": 28.046875
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 19.731792708333334,
+          "time_ms": 172.2635760000344,
+          "peak_delta_mb": 20.671875
+        }
+      }
+    },
+    {
+      "k": 2048,
+      "methods": {
+        "emeans_native": {
+          "te_mse": 74.1519375,
+          "time_ms": 276.103406499999,
+          "peak_delta_mb": 158.03076171875
+        },
+        "evolved_native": {
+          "te_mse": 19.561558333333334,
+          "time_ms": 214.585288999956,
+          "peak_delta_mb": 79.8486328125
+        },
+        "evolved_triton": {
+          "te_mse": 19.513150000000003,
+          "time_ms": 1335.3202645000124,
+          "peak_delta_mb": 63.2255859375
+        },
+        "evolved_triton_fp16": {
+          "te_mse": 18.822646875,
+          "time_ms": 1969.0261979999946,
+          "peak_delta_mb": 63.2255859375
+        },
+        "evolved_emeans_triton": {
+          "te_mse": 19.513134375,
+          "time_ms": 338.6694870000042,
+          "peak_delta_mb": 63.2255859375
+        }
+      }
+    }
+  ]
+}
