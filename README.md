@@ -21,7 +21,7 @@
 - **Superior Quantization Accuracy Across Architectures:**
   - **NVIDIA A100 (`SM80`):** **`+55.21%`** mean Test MSE reduction (`+3.14%` to `+77.48%` across 9 benchmarks) with **`0.875×`** median peak workspace VRAM.
   - **NVIDIA L4 (`SM89`):** **`+54.35%`** mean Test MSE reduction (`+2.02%` to `+78.47%`) with **`0.875×`** median peak workspace VRAM.
-  - **NVIDIA T4 (`SM75`):** **`+53.81%`–`+54.03%`** mean Test MSE reduction, running cleanly across all 9 workloads (where upstream `e-means` BF16/FP16 Triton kernels fail on SM75), **`0.881×`** faster wall-clock time (`evolved_native`), and **`0.360×`** peak VRAM (`0.222×` on 1M×128D `k=2048`).
+  - **NVIDIA T4 (`SM75`):** Running cleanly across all 9 workloads (where upstream `e-means` BF16/FP16 Triton kernels fail on SM75), `backend="auto"` (`evolved_native`) achieves **`+53.81%`** mean Test MSE reduction, **`0.881×`** median wall-clock time, and **`0.658×`** median peak VRAM (`0.277×` on 1M×128D `k=2048`). Explicit `evolved_triton` pushes mean MSE gain to **`+54.03%`** and median VRAM down to **`0.360×`** (`0.222×` on 1M×128D `k=2048`), at **`4.586×`** median wall-clock time (as Turing lacks BF16/TF32 Tensor Cores).
   - **CPU (12 Unseen Datasets × 5 Seeds):** **`+19.67%`** mean Test MSE gain (`+21.30%` Train) at **`0.977×`** `e-means` median wall-clock speed (**`2.24×`** median faster than equal-epoch `sklearn.cluster.MiniBatchKMeans`, faster on 8/12 tasks up to `3.71×` while `sklearn` is faster on small/low-d workloads at `0.40×–0.98×`) with **`0.0 MB` extra OS RSS memory**.
 - **1 Epoch Beats 8 Epochs:** On `200k × 128D, k=1024`, `s-means` at **$T = 1.0$ epoch** achieves **`32.2` Test MSE in `33 ms`** on A100—beating `e-means` at **$T = 8.0$ epochs** (`65.7` MSE in `36 ms`) by more than **2× lower quantization error** in less wall-clock time.
 - **Zero-Allocation Custom Triton Kernels:** Fused tiled L2 squared-distance + `argmin` without materializing `[B, K]` distance matrices, online $O(Kd)$ inter-cluster feature variance tracking, fused EMA + SSE-EMA + final-pass updates, Philox-RNG anisotropic splits, and Empirical-Bayes centroid finalization.
@@ -137,16 +137,16 @@ All raw measurements are archived in [`benchmarks/results/`](benchmarks/results)
 
 | Dataset | Dimensions & Budget | NVIDIA T4 (`SM75`, Native ref) | NVIDIA L4 (`SM89`, Triton ref) | NVIDIA A100 (`SM80`, Triton ref) |
 | :--- | :--- | :---: | :---: | :---: |
-| `gmm_100k_d128_k512` | `100k × 128D, k=512, T=3` | **`+78.71%`** MSE (`0.344×` VRAM) | **`+78.47%`** MSE (`0.872×` VRAM) | **`+77.48%`** MSE (`0.872×` VRAM) |
+| `gmm_100k_d128_k512` | `100k × 128D, k=512, T=3` | **`+78.71%`** MSE (`0.344×` Tri VRAM) | **`+78.47%`** MSE (`0.872×` VRAM) | **`+77.48%`** MSE (`0.872×` VRAM) |
 | `zipf_200k_d128_k1024` | `200k × 128D, k=1024, T=3` | **`+45.34%`** (`+45.97%` nat, `0.805×` t) | **`+49.38%`** MSE (`0.987×` VRAM) | **`+47.82%`** MSE (`0.987×` VRAM) |
 | `large_500k_d128_k1024` | `500k × 128D, k=1024, T=3` | **`+75.02%`** (`+74.36%` nat, `0.812×` t) | **`+74.38%`** MSE (`0.846×` VRAM) | **`+75.94%`** MSE (`0.846×` VRAM) |
 | `highdim_250k_d256_k512` | `250k × 256D, k=512, T=3` | **`+74.04%`** (`+73.66%` nat, `0.765×` t) | **`+73.36%`** MSE (`1.079×` VRAM) | **`+74.16%`** MSE (`1.079×` VRAM) |
 | `aniso_200k_d64_k512` | `200k × 64D, k=512, T=3` | **`+49.01%`** (`+49.43%` nat) | **`+46.16%`** MSE (`0.879×` VRAM) | **`+52.51%`** MSE (`0.879×` VRAM) |
-| `covtype_real_581k` | `465k × 54D, k=512, T=3` | **`+1.88%`** MSE (`0.299×` VRAM) | **`+2.02%`** MSE (`0.765×` VRAM) | **`+3.14%`** MSE (`0.765×` VRAM) |
-| `lowd_200k_d8_k512` | `200k × 8D, k=512, T=3` | **`+20.68%`** MSE (`0.554×` VRAM) | **`+23.75%`** MSE (`0.875×` VRAM) | **`+23.36%`** MSE (`0.875×` VRAM) |
+| `covtype_real_581k` | `465k × 54D, k=512, T=3` | **`+1.88%`** MSE (`0.299×` Tri VRAM) | **`+2.02%`** MSE (`0.765×` VRAM) | **`+3.14%`** MSE (`0.765×` VRAM) |
+| `lowd_200k_d8_k512` | `200k × 8D, k=512, T=3` | **`+20.68%`** MSE (`0.554×` Tri VRAM) | **`+23.75%`** MSE (`0.875×` VRAM) | **`+23.36%`** MSE (`0.875×` VRAM) |
 | `frac_T1p5_300k_d64_k512` | `300k × 64D, k=512, T=1.5` | **`+67.06%`** (`0.569×` t w/ etri) | **`+67.94%`** MSE (`0.882×` VRAM) | **`+67.50%`** MSE (`0.882×` VRAM) |
 | `mega_1m_d128_k2048` | `1M × 128D, k=2048, T=3` | **`+74.58%`** nat (`0.762×` t, `0.277×` VRAM) | **`+73.70%`** (`1.114×` t, `0.842×` VRAM) | **`+74.94%`** (`1.312×` t, `0.842×` VRAM) |
-| **Mean Across All 9** | — | **`+54.03%`** (Custom) / **`+53.81%`** (Nat) | **`+54.35%`** | **`+55.21%`** |
+| **Mean Across All 9** | — | **`+54.03%`** Tri (`4.586×` t, `0.360×` VRAM) / **`+53.81%`** Nat (`0.881×` t, `0.658×` VRAM) | **`+54.35%`** | **`+55.21%`** |
 
 ### 2. Epoch Budget & Speed–Accuracy Pareto Frontier
 
@@ -188,7 +188,7 @@ Across 12 strictly unseen CPU datasets (5 seeds each), `s-means` delivers **`+19
 
 ### Architectural & Engineering Notes
 
-- **Turing (`SM75`) vs Ampere/Ada (`SM80+`):** Upstream `e-means` BF16/FP16 Triton kernels rely on `.bf16` PTX / `>64 KB` shared memory tiles that fail on T4 (`SM75`). `s-means` detects GPU compute capability automatically: `backend="auto"` selects BF16 Tensor-Core Triton kernels on `SM80+` and chunks native FP32 `addmm` + CUB reductions on `SM75` (matching or beating Meta's native T4 path in speed while slashing VRAM to `0.22×–0.56×`).
+- **Turing (`SM75`) vs Ampere/Ada (`SM80+`):** Upstream `e-means` BF16/FP16 Triton kernels rely on `.bf16` PTX / `>64 KB` shared memory tiles that fail on T4 (`SM75`). `s-means` detects GPU compute capability automatically: `backend="auto"` selects BF16 Tensor-Core Triton kernels on `SM80+` and chunked native FP32 `addmm` + CUB reductions on `SM75` (`0.881×` median time and `0.658×` median VRAM, range `0.277×–0.879×`; `backend="triton"` trades speed for `0.360×` median VRAM, range `0.222×–0.554×`, at `4.586×` median time).
 - **Low-Dimensional (`d <= 16`) Eager Dispatch:** On `lowd_200k_d8_k512`, `d <= 16` triggers the `quality` batch law (`~392` small batches). Because `e-means` captures a static CUDA Graph across steps while `s-means` currently executes an eager Python step loop, A100 wall-clock time is `567 ms` vs `95 ms` (while still giving `+23.4%` MSE gain and `0.875×` VRAM). CUDA Graph capture for fixed-shape steps is planned next.
 
 ---
