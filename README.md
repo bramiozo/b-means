@@ -12,7 +12,7 @@
 
 # s-means: Scale- & Distortion-Aware Single/Few-Epoch Clustering
 
-**`s-means`** is a drop-in CPU & GPU clustering library compatible with both **PyTorch** (including custom **fused Triton CUDA kernels**) and **`scikit-learn`**. It achieves **+54% to +55% average Test MSE reduction** over Meta's [`e-means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means) across **NVIDIA T4, L4, and A100 GPUs**—often matching or beating 8-epoch `e-means` quality in **1.0 epoch**—while using **12%–64% less GPU workspace VRAM** and remaining **2.2×–31× faster than `scikit-learn` `MiniBatchKMeans` on CPU**.
+**`s-means`** is a drop-in CPU & GPU clustering library compatible with both **PyTorch** (including custom **fused Triton CUDA kernels**) and **`scikit-learn`** ([**Read the Research Blog**](https://suayptalha.github.io/s-means-blog/)). It achieves **+54% to +55% average Test MSE reduction** over Meta's [`e-means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means) across **NVIDIA T4, L4, and A100 GPUs**—often matching or beating 8-epoch `e-means` quality in **1.0 epoch**—while using **12%–64% less GPU workspace VRAM** and remaining **2.2×–31× faster than `scikit-learn` `MiniBatchKMeans` on CPU**.
 
 ---
 
@@ -214,6 +214,33 @@ s-means/
 ├── assets/                  # Banner and 300-DPI benchmark figures
 └── pyproject.toml
 ```
+
+---
+
+## Citation
+
+If you use `s-means` in your research or engineering systems, please cite [`suayptalha.github.io/s-means-blog`](https://suayptalha.github.io/s-means-blog/):
+
+```bibtex
+@misc{kocabay2026smeans,
+  title  = {s-means: outperforming e-means (which outperforms k-means)},
+  author = {Kocabay, {\c{S}}uayp Talha and Y{\"u}ksel, Kamer Ali and Yal{\c{c}}{\i}n, Kerem},
+  year   = {2026},
+  url    = {https://suayptalha.github.io/s-means-blog/},
+  note   = {Open-source package available at \url{https://github.com/suayptalha/s-means}}
+}
+```
+
+---
+
+## References
+
+1. **Swann Bessa, Pierre-Emmanuel Mazaré, Gergely Szilvasy, Hugo Touvron, David Picard, Matthijs Douze, and Hervé Jégou.** *"e-means: outperforming k-means (in one-tenth the epochs)."* arXiv preprint arXiv:2611.09501 (2026). [`arxiv.org/abs/2611.09501`](https://arxiv.org/abs/2611.09501) · [`faiss/contrib/e_means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means)
+2. **Stuart P. Lloyd.** *"Least squares quantization in PCM."* IEEE Transactions on Information Theory, Vol. 28, No. 2, pp. 129–137 (1982).
+3. **D. Sculley.** *"Web-scale k-means clustering."* Proceedings of the 19th International Conference on World Wide Web (WWW '10), pp. 1177–1178 (2010). DOI: `10.1145/1772690.1772862`
+4. **Fabian Pedregosa, Gaël Varoquaux, Alexandre Gramfort, Vincent Michel, Bertrand Thirion, Olivier Grisel, Mathieu Blondel, Peter Prettenhofer, Ron Weiss, Vincent Dubourg, Jake Vanderplas, Alexandre Passos, David Cournapeau, Matthieu Brucher, Matthieu Perrot, and Édouard Duchesnay.** *"Scikit-learn: Machine Learning in Python."* Journal of Machine Learning Research (JMLR), Vol. 12, pp. 2825–2830 (2011).
+5. **Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban Desmaison, Andreas Köpf, Edward Yang, Zachary DeVito, Martin Raison, Alykhan Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu Fang, Junjie Bai, and Soumith Chintala.** *"PyTorch: An Imperative Style, High-Performance Deep Learning Library."* Advances in Neural Information Processing Systems 32 (NeurIPS 2019). [`arxiv.org/abs/1912.01703`](https://arxiv.org/abs/1912.01703)
+6. **Philippe Tillet, H. T. Kung, and David Cox.** *"Triton: An Intermediate Language and Compiler for Tiled Neural Network Computations."* Proceedings of the 3rd ACM SIGPLAN International Workshop on Machine Learning and Programming Languages (MAPL 2019).
 
 ---
 
