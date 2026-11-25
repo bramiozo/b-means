@@ -6,6 +6,7 @@ from typing import Any, Dict, Tuple
 
 import torch
 
+from ._extrapolation import RotationalExtrapolator
 from ._recipe import (
     SMeansConfig,
     compute_epoch_rows,
@@ -131,6 +132,10 @@ def fit_gpu(
 
     centroids = subsampled_d15_init(
         x_in, k, seed=seed, rounds=cfg.init_rounds, power=cfg.init_power
+    )
+    extrapolator = (
+        RotationalExtrapolator(centroids, cfg)
+        if cfg.extrapolation and cfg.extrapolation_damping > 0 else None
     )
     usage = torch.full((k,), recipe.init_usage, dtype=torch.float32, device=device)
     sse_ema = torch.zeros(k, dtype=torch.float32, device=device)
@@ -264,6 +269,9 @@ def fit_gpu(
                     pass_sums.add_(sums, alpha=w_pass)
                     pass_counts.add_(counts, alpha=w_pass)
 
+            if extrapolator is not None:
+                extrapolator.update(centroids, sums, counts, usage, alpha, step)
+
             if ((step + 1) % check_every == 0) and (step <= revive_stop_step):
                 thresh = usage.sum() * unused_thresh / max(1, k)
                 unused = usage < thresh
@@ -310,6 +318,8 @@ def fit_gpu(
                         hsse = 0.5 * sse_ema[src]
                         sse_ema[tgt] = hsse
                         sse_ema[src] = hsse
+                    if extrapolator is not None:
+                        extrapolator.reset(centroids, src, tgt)
                     total_splits += n_sp
 
             step += 1

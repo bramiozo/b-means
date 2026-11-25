@@ -6,6 +6,7 @@ from typing import Any, Dict, Tuple
 
 import torch
 
+from ._extrapolation import RotationalExtrapolator
 from ._recipe import (
     SMeansConfig,
     compute_epoch_rows,
@@ -90,6 +91,10 @@ def fit_cpu(
     centroids = subsampled_d15_init(
         x_f, k, seed=seed, rounds=cfg.init_rounds, power=cfg.init_power
     ).to(dtype=torch.float32, device=device).contiguous()
+    extrapolator = (
+        RotationalExtrapolator(centroids, cfg)
+        if cfg.extrapolation and cfg.extrapolation_damping > 0 else None
+    )
     usage = torch.full((k,), recipe.init_usage, dtype=torch.float32, device=device)
     sse_ema = torch.zeros((k,), dtype=torch.float32, device=device)
     feat_scale = torch.ones((d,), dtype=torch.float32, device=device)
@@ -182,6 +187,9 @@ def fit_cpu(
             sse_ema.mul_(cfg.sse_decay).add_(batch_sse, alpha=1.0 - cfg.sse_decay)
             dirty_c = True
 
+            if extrapolator is not None:
+                extrapolator.update(centroids, batch_sums, batch_counts, usage, alpha, step)
+
             # Distortion-aware anisotropic dead-cluster revival every check_every steps
             if ((step + 1) % check_every == 0) and (step <= revive_stop_step):
                 thresh = float(usage.sum().item()) * unused_thresh / max(1, k)
@@ -221,6 +229,8 @@ def fit_cpu(
                     sse_ema[tgt] = hsse
                     sse_ema[src] = hsse
                     dirty_c = True
+                    if extrapolator is not None:
+                        extrapolator.reset(centroids, src, tgt)
                     total_splits += n_sp
 
             step += 1
