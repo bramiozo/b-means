@@ -23,6 +23,20 @@ class SMeansConfig:
     init_power: float = 1.5
     assign_tile_rows: int = 512
     assign_tile_cols: int = 256
+    extrapolation: bool = False
+    extrapolation_interval: int = 5
+    extrapolation_damping: float = 0.5
+    extrapolation_max_step: float = 3.0
+
+    def __post_init__(self):
+        if (not isinstance(self.extrapolation_interval, int)
+                or isinstance(self.extrapolation_interval, bool)
+                or self.extrapolation_interval < 1):
+            raise ValueError("extrapolation_interval must be a positive integer")
+        if not 0.0 <= self.extrapolation_damping <= 1.0:
+            raise ValueError("extrapolation_damping must be in [0, 1]")
+        if not math.isfinite(self.extrapolation_max_step) or self.extrapolation_max_step <= 0:
+            raise ValueError("extrapolation_max_step must be finite and positive")
 
 
 @dataclass(frozen=True)

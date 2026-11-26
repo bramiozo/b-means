@@ -74,6 +74,15 @@ class SMeans(
         Row tile size for CPU cache-blocked assignment.
     assign_tile_cols : int, default=256
         Centroid column tile size for CPU cache-blocked assignment.
+    extrapolation : bool, default=False
+        Enable experimental rotational fixed-point acceleration.
+    extrapolation_interval : int, default=5
+        Attempt extrapolation every this many mini-batches.
+    extrapolation_damping : float, default=0.5
+        Fraction of the proposed correction to apply.
+    extrapolation_max_step : float, default=3.0
+        Maximum correction length relative to the latest EMA displacement,
+        before damping.
     random_state : int, default=None
         Random seed controlling initialization, batch shuffling, and revival splits.
     """
@@ -96,6 +105,10 @@ class SMeans(
         "init_power": [Interval(Real, 0.0, None, closed="left")],
         "assign_tile_rows": [Interval(Integral, 16, None, closed="left")],
         "assign_tile_cols": [Interval(Integral, 16, None, closed="left")],
+        "extrapolation": ["boolean"],
+        "extrapolation_interval": [Interval(Integral, 1, None, closed="left")],
+        "extrapolation_damping": [Interval(Real, 0.0, 1.0, closed="both")],
+        "extrapolation_max_step": [Interval(Real, 0.0, None, closed="neither")],
         "random_state": ["random_state"],
     }
 
@@ -120,6 +133,10 @@ class SMeans(
         assign_tile_rows: int = 512,
         assign_tile_cols: int = 256,
         random_state: Optional[int] = None,
+        extrapolation: bool = False,
+        extrapolation_interval: int = 5,
+        extrapolation_damping: float = 0.5,
+        extrapolation_max_step: float = 3.0,
     ):
         self.n_clusters = n_clusters
         self.nepochs = nepochs
@@ -139,6 +156,10 @@ class SMeans(
         self.assign_tile_rows = assign_tile_rows
         self.assign_tile_cols = assign_tile_cols
         self.random_state = random_state
+        self.extrapolation = extrapolation
+        self.extrapolation_interval = extrapolation_interval
+        self.extrapolation_damping = extrapolation_damping
+        self.extrapolation_max_step = extrapolation_max_step
 
     def _get_seed(self) -> int:
         if self.random_state is None:
@@ -176,6 +197,10 @@ class SMeans(
             init_power=float(self.init_power),
             assign_tile_rows=int(self.assign_tile_rows),
             assign_tile_cols=int(self.assign_tile_cols),
+            extrapolation=bool(self.extrapolation),
+            extrapolation_interval=int(self.extrapolation_interval),
+            extrapolation_damping=float(self.extrapolation_damping),
+            extrapolation_max_step=float(self.extrapolation_max_step),
         )
 
     @_fit_context(prefer_skip_nested_validation=True)

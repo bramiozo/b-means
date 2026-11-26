@@ -125,6 +125,47 @@ Standard mini-batch $k$-means and single/few-epoch streaming variants (like `e-m
 
 ---
 
+## Experimental rotational fixed-point extrapolation
+
+Opt in using the PyTorch interface:
+
+```python
+from smeans import smeans, SMeansConfig
+
+centroids = smeans(x, n_clusters=256, nepochs=1.0,
+                   config=SMeansConfig(extrapolation=True))
+```
+
+Or with scikit-learn: `SMeans(n_clusters=256, nepochs=1.0, extrapolation=True)`.
+
+Given two consecutive ordinary EMA displacements $u=c_{t-1}-c_{t-2}$
+and $v=c_t-c_{t-1}$, estimate the remaining displacement to the fixed
+point of a locally constant planar rotation-contraction:
+
+$
+\Delta = \frac{(2u^\top v-\|v\|^2)v-\|v\|^2u}{\|v-u\|^2}.
+$
+
+This is a vector form of complex Aitken extrapolation and also handles
+collinear contraction. The estimate is not a guarantee for noisy,
+time-varying mini-batch dynamics.
+
+Defaults: attempt every 5 mini-batches, clip the correction norm to
+3 times the latest ordinary displacement, and apply damping 0.5.
+These settings are exposed as `extrapolation_interval`,
+`extrapolation_max_step`, and `extrapolation_damping`.
+Reject noncontracting or ill-conditioned trajectories, incompatible
+successive EMA weights, and corrections that do not lower the current
+mini-batch fixed-assignment SSE relative to the ordinary EMA update.
+Untouched centroids and both participants in a split invalidate history;
+accepted extrapolations restart history as well.
+
+The optional stage uses shared PyTorch operations on CPU and CUDA
+(including the Triton backend), with O(Kd) extra state and no additional
+data passes. It leaves final-pass averaging and empirical Bayes
+finalization unchanged. This is an experimental heuristic, not yet a
+benchmarked improvement; the baseline remains the default.
+
 ## Benchmark Results
 
 All raw measurements are archived in [`benchmarks/results/`](benchmarks/results) and can be printed with `python benchmarks/summarize_results.py`.
